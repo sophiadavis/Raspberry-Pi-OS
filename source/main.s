@@ -8,7 +8,7 @@ ldr r0,=0x20200000 // set pointer to GPIO controller
 // Enable OUTPUT to 16th GPIO pin
 mov r1,#1 // #num -- literal decimal numbers (mov is faster than ldr -- does not involve memory interaction)
 lsl r1,#18 // we want 18th GPIO pin
-str r1,[r0,#4]
+str r1,[r0,#4] // store register -- store value at r1 into next address
 
 // Initialize r3 to 0 (LED off)
 mov r3,#0
