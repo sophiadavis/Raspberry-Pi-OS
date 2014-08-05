@@ -1,39 +1,39 @@
-.glob GetGpioAddress // make this label accessible to all files
+.globl GetGpioAddress // make this label accessible to all files
 GetGpioAddress:
-ldr r0,=0x20200000 // stores GPIO controller address in r0
-mov pc,lr
+    ldr r0,=0x20200000 // stores GPIO controller address in r0
+    mov pc,lr
             // pc contains address of the next instruction to be run
             // lr contains the return address
             // we are loading the return address as the next instruction to run
 
 
-.glob SetGpioFunction
+.globl SetGpioFunction
 SetGpioFunction:
-           // checking input (dont just assume inputs will be correct)
-cmp r0,#53 // one input -- it must be a GPIO pin number, so it must be between 0 and 53
-cmpls r1,#7 // each pin has 8 functions
-            // cmpls is run only if r0 <= #53
-movhi pc,lr // and if r1 is greater than 7, go back to caller
-// done checking inputs
+               // checking input (dont just assume inputs will be correct)
+    cmp r0,#53 // one input -- it must be a GPIO pin number, so it must be between 0 and 53
+    cmpls r1,#7 // each pin has 8 functions
+                // cmpls is run only if r0 <= #53
+    movhi pc,lr // and if r1 is greater than 7, go back to caller
+    // done checking inputs
 
-push {lr} // push return address
-mov r2,r0 // move GPIO pin number out of r0 (we know GetGpioAddress will overwrite this)
-bl GetGpioAddress
-    // bl calls a function by updating lr to the next instruction address, then branching to function
+    push {lr} // push return address
+    mov r2,r0 // move GPIO pin number out of r0 (we know GetGpioAddress will overwrite this)
+    bl GetGpioAddress
+        // bl calls a function by updating lr to the next instruction address, then branching to function
 
-// Find which block of 10 pins corresponds to our pin (and increment GPIO address accordingly)
-// Division is slower than repeated subtraction
-// PROBLEM! resets all other pin values to 0
-functionLoop$:
-    cmp r2,#9
-    subhi r2,#10
-    addhi r0,#4
-    bhi functionLoop$
+    // Find which block of 10 pins corresponds to our pin (and increment GPIO address accordingly)
+    // Division is slower than repeated subtraction
+    // PROBLEM! resets all other pin values to 0
+    functionLoop$:
+        cmp r2,#9
+        subhi r2,#10
+        addhi r0,#4
+        bhi functionLoop$
     
-    add r2, r2,lsl #1 // = multiplication by 3 (r2*2 + r2, or bitshift left by 1 place + r2)
-    lsl r1,r2 // r2 contains offset(?) for the pin we want to access, so shift the function value left that much
-    str r1,[r0]
-    pop {pc}
+        add r2, r2,lsl #1 // = multiplication by 3 (r2*2 + r2, or bitshift left by 1 place + r2)
+        lsl r1,r2 // r2 contains offset(?) for the pin we want to access, so shift the function value left that much
+        str r1,[r0]
+        pop {pc}
     
 .globl SetGpio
 SetGpio:
