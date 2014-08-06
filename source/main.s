@@ -20,12 +20,17 @@ main:
     .unreq pinNum
     .unreq pinFunc
 
-    blinkLoop$:    
-        mov r2,#0x3F0000
-        wait$:
-        sub r2,#1
-        cmp r2,#0
-        bne wait$
+    blinkLoop$: 
+        pinNum .req r0
+        pinVal .req r1
+        mov pinNum,#16
+        mov pinVal,#1 // 0 bc OFF
+        bl SetGpio
+        .unreq pinNum
+        .unreq pinVal
+        mov switchReg,#1
+           
+        bl Wait
     
         cmp r3,#0
         bne turnOff$
