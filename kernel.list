@@ -57,26 +57,42 @@ Disassembly of section .text:
     8094:	ebffffdc 	bl	800c <SetGpioFunction>
 
 00008098 <blinkLoop$>:
-    8098:	e3a0283f 	mov	r2, #4128768	; 0x3f0000
+    8098:	eb000010 	bl	80e0 <Wait>
+    809c:	e3530000 	cmp	r3, #0
+    80a0:	1a000000 	bne	80a8 <turnOff$>
+    80a4:	ea000004 	b	80bc <turnOn$>
 
-0000809c <wait$>:
-    809c:	e2422001 	sub	r2, r2, #1
-    80a0:	e3520000 	cmp	r2, #0
-    80a4:	1afffffc 	bne	809c <wait$>
-    80a8:	e3530000 	cmp	r3, #0
-    80ac:	1a000000 	bne	80b4 <turnOff$>
-    80b0:	ea000004 	b	80c8 <turnOn$>
+000080a8 <turnOff$>:
+    80a8:	e3a00010 	mov	r0, #16
+    80ac:	e3a01000 	mov	r1, #0
+    80b0:	ebffffe3 	bl	8044 <SetGpio>
+    80b4:	e3a03000 	mov	r3, #0
+    80b8:	eafffff6 	b	8098 <blinkLoop$>
 
-000080b4 <turnOff$>:
-    80b4:	e3a00010 	mov	r0, #16
-    80b8:	e3a01000 	mov	r1, #0
-    80bc:	ebffffe0 	bl	8044 <SetGpio>
-    80c0:	e3a03000 	mov	r3, #0
-    80c4:	eafffff3 	b	8098 <blinkLoop$>
+000080bc <turnOn$>:
+    80bc:	e3a00010 	mov	r0, #16
+    80c0:	e3a01001 	mov	r1, #1
+    80c4:	ebffffde 	bl	8044 <SetGpio>
+    80c8:	e3a03001 	mov	r3, #1
+    80cc:	eafffff1 	b	8098 <blinkLoop$>
 
-000080c8 <turnOn$>:
-    80c8:	e3a00010 	mov	r0, #16
-    80cc:	e3a01001 	mov	r1, #1
-    80d0:	ebffffdb 	bl	8044 <SetGpio>
-    80d4:	e3a03001 	mov	r3, #1
-    80d8:	eaffffee 	b	8098 <blinkLoop$>
+000080d0 <GetCurrentTimeStamp>:
+    80d0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    80d4:	e59f2028 	ldr	r2, [pc, #40]	; 8104 <waitLoop$+0x10>
+    80d8:	e1c200d4 	ldrd	r0, [r2, #4]
+    80dc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+000080e0 <Wait>:
+    80e0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    80e4:	e59f301c 	ldr	r3, [pc, #28]	; 8108 <waitLoop$+0x14>
+    80e8:	ebfffff8 	bl	80d0 <GetCurrentTimeStamp>
+    80ec:	e0800003 	add	r0, r0, r3
+    80f0:	e1a01000 	mov	r1, r0
+
+000080f4 <waitLoop$>:
+    80f4:	ebfffff5 	bl	80d0 <GetCurrentTimeStamp>
+    80f8:	e1510000 	cmp	r1, r0
+    80fc:	8afffffc 	bhi	80f4 <waitLoop$>
+    8100:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+    8104:	20003004 	.word	0x20003004
+    8108:	0007a120 	.word	0x0007a120

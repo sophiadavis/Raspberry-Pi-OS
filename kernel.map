@@ -7,6 +7,9 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 build/main.o
  .ARM.attributes
                 0x0000000000000000       0x14 build/main.o
+ .bss           0x0000000000000000        0x0 build/systemTimer.o
+ .ARM.attributes
+                0x0000000000000000       0x14 build/systemTimer.o
 
 Memory Configuration
 
@@ -17,24 +20,28 @@ Linker script and memory map
 
 LOAD build/gpio.o
 LOAD build/main.o
+LOAD build/systemTimer.o
 
 .init           0x0000000000008000        0x4
  *(.init)
  .init          0x0000000000008000        0x4 build/main.o
                 0x0000000000008000                _start
 
-.text           0x0000000000008004       0xd8
+.text           0x0000000000008004      0x108
  *(.text)
  .text          0x0000000000008004       0x80 build/gpio.o
                 0x0000000000008004                GetGpioAddress
                 0x000000000000800c                SetGpioFunction
                 0x0000000000008044                SetGpio
- .text          0x0000000000008084       0x58 build/main.o
+ .text          0x0000000000008084       0x4c build/main.o
+ .text          0x00000000000080d0       0x3c build/systemTimer.o
+                0x00000000000080e0                Wait
 
-.data           0x00000000000080dc        0x0
+.data           0x000000000000810c        0x0
  *(.data)
- .data          0x00000000000080dc        0x0 build/gpio.o
- .data          0x00000000000080dc        0x0 build/main.o
+ .data          0x000000000000810c        0x0 build/gpio.o
+ .data          0x000000000000810c        0x0 build/main.o
+ .data          0x000000000000810c        0x0 build/systemTimer.o
 
 /DISCARD/
  *(*)

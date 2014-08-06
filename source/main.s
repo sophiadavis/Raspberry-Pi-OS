@@ -15,17 +15,13 @@ main:
     pinNum .req r0
     pinFunc .req r1
     mov pinNum,#16
-    mov pinFunc,#1
+    mov pinFunc,#1 // #1 = output
     bl SetGpioFunction
     .unreq pinNum
     .unreq pinFunc
 
     blinkLoop$:    
-        mov r2,#0x3F0000
-        wait$:
-        sub r2,#1
-        cmp r2,#0
-        bne wait$
+        bl Wait
     
         cmp r3,#0
         bne turnOff$
