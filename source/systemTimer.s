@@ -1,13 +1,14 @@
 GetCurrentTimeStamp:
-    push {lr}
+    //push {lr}
     ldr r2,=0x20003004 // address of counter
-    ldrd r0,r1,[r2,#4] // get starting time stamp
-    pop {pc}
+    ldrd r0,r1,[r2,#0] // get starting time stamp // change #4 to #0?
+    //pop {pc}
+    mov pc,lr
 
 .globl Wait
 Wait:
     push {lr}
-    delay .req r3
+    delay .req r5
     ldr delay,=500000
     
     // get ending time
@@ -17,10 +18,10 @@ Wait:
     bombTime .req r1
     
     .unreq delay
-    currentTime .req r0
     
     waitLoop$:
         bl GetCurrentTimeStamp
+        currentTime .req r0
         cmp bombTime,currentTime
         bhi waitLoop$
         
