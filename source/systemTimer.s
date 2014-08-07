@@ -1,9 +1,9 @@
 GetCurrentTimeStamp:
-    //push {lr}
+    push {lr}
     ldr r2,=0x20003004 // address of counter
-    ldrd r0,r1,[r2,#0] // get starting time stamp // change #4 to #0?
-    //pop {pc}
-    mov pc,lr
+    ldr r0,[r2,#0] // get starting time stamp
+    pop {pc}
+    //mov pc,lr
 
 .globl Wait
 Wait:

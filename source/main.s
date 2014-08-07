@@ -8,8 +8,8 @@ b main
 main:
     mov sp,#0x8000 // default load address
     
-    switchReg .req r3
-    mov r3,#0
+    switchReg .req r6
+    mov switchReg,#0
 
     // enable output to GPIO pin 16
     pinNum .req r0
@@ -21,18 +21,11 @@ main:
     .unreq pinFunc
 
     blinkLoop$: 
-        pinNum .req r0
-        pinVal .req r1
-        mov pinNum,#16
-        mov pinVal,#1 // 0 bc OFF
-        bl SetGpio
-        .unreq pinNum
-        .unreq pinVal
-        mov switchReg,#1
-           
+        
+        //ldr r0,=500000
         bl Wait
     
-        cmp r3,#0
+        cmp switchReg,#0
         bne turnOff$
         b turnOn$
     
@@ -51,7 +44,7 @@ main:
         pinNum .req r0
         pinVal .req r1
         mov pinNum,#16
-        mov pinVal,#1 // 0 bc OFF
+        mov pinVal,#1
         bl SetGpio
         .unreq pinNum
         .unreq pinVal
