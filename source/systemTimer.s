@@ -9,7 +9,7 @@ GetCurrentTimeStamp:
 Wait:
     push {lr}
     delay .req r5
-    ldr delay,=500000
+    mov delay,r0
     
     // get ending time
     bl GetCurrentTimeStamp

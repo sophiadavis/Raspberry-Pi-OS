@@ -27,21 +27,21 @@ LOAD build/systemTimer.o
  .init          0x0000000000008000        0x4 build/main.o
                 0x0000000000008000                _start
 
-.text           0x0000000000008004      0x108
+.text           0x0000000000008004      0x10c
  *(.text)
  .text          0x0000000000008004       0x80 build/gpio.o
                 0x0000000000008004                GetGpioAddress
                 0x000000000000800c                SetGpioFunction
                 0x0000000000008044                SetGpio
- .text          0x0000000000008084       0x4c build/main.o
- .text          0x00000000000080d0       0x3c build/systemTimer.o
-                0x00000000000080e0                Wait
+ .text          0x0000000000008084       0x54 build/main.o
+ .text          0x00000000000080d8       0x38 build/systemTimer.o
+                0x00000000000080e8                Wait
 
-.data           0x000000000000810c        0x0
+.data           0x0000000000008110        0x4
  *(.data)
- .data          0x000000000000810c        0x0 build/gpio.o
- .data          0x000000000000810c        0x0 build/main.o
- .data          0x000000000000810c        0x0 build/systemTimer.o
+ .data          0x0000000000008110        0x0 build/gpio.o
+ .data          0x0000000000008110        0x4 build/main.o
+ .data          0x0000000000008114        0x0 build/systemTimer.o
 
 /DISCARD/
  *(*)
