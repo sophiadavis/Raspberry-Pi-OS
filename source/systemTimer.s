@@ -8,7 +8,8 @@ GetCurrentTimeStamp:
 .globl Wait
 Wait:
     push {lr}
-    delay .req r5
+    push {r6}
+    delay .req r6
     mov delay,r0
     
     // get ending time
@@ -27,4 +28,5 @@ Wait:
         
     .unreq bombTime
     .unreq currentTime
+    pop {r6}
     pop {pc}

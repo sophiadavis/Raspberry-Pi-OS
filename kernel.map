@@ -1,9 +1,15 @@
 
 Discarded input sections
 
+ .bss           0x0000000000000000        0x0 build/framebuffer.o
+ .ARM.attributes
+                0x0000000000000000       0x14 build/framebuffer.o
  .bss           0x0000000000000000        0x0 build/gpio.o
  .ARM.attributes
                 0x0000000000000000       0x14 build/gpio.o
+ .bss           0x0000000000000000        0x0 build/graphics.o
+ .ARM.attributes
+                0x0000000000000000       0x14 build/graphics.o
  .bss           0x0000000000000000        0x0 build/main.o
  .ARM.attributes
                 0x0000000000000000       0x14 build/main.o
@@ -18,7 +24,9 @@ Name             Origin             Length             Attributes
 
 Linker script and memory map
 
+LOAD build/framebuffer.o
 LOAD build/gpio.o
+LOAD build/graphics.o
 LOAD build/main.o
 LOAD build/systemTimer.o
 
@@ -27,21 +35,30 @@ LOAD build/systemTimer.o
  .init          0x0000000000008000        0x4 build/main.o
                 0x0000000000008000                _start
 
-.text           0x0000000000008004      0x10c
+.text           0x0000000000008004      0x1f8
  *(.text)
- .text          0x0000000000008004       0x80 build/gpio.o
-                0x0000000000008004                GetGpioAddress
-                0x000000000000800c                SetGpioFunction
-                0x0000000000008044                SetGpio
- .text          0x0000000000008084       0x54 build/main.o
- .text          0x00000000000080d8       0x38 build/systemTimer.o
-                0x00000000000080e8                Wait
+ .text          0x0000000000008004       0x50 build/framebuffer.o
+                0x0000000000008004                InitialiseFrameBuffer
+ .text          0x0000000000008054       0x80 build/gpio.o
+                0x0000000000008054                GetGpioAddress
+                0x000000000000805c                SetGpioFunction
+                0x0000000000008094                SetGpio
+ .text          0x00000000000080d4       0x78 build/graphics.o
+                0x00000000000080d4                GetMailboxBase
+                0x00000000000080dc                MailboxWrite
+                0x0000000000008110                MailboxRead
+ .text          0x000000000000814c       0x70 build/main.o
+ .text          0x00000000000081bc       0x40 build/systemTimer.o
+                0x00000000000081cc                Wait
 
-.data           0x0000000000008110        0x4
+.data           0x0000000000008200       0x34
  *(.data)
- .data          0x0000000000008110        0x0 build/gpio.o
- .data          0x0000000000008110        0x4 build/main.o
- .data          0x0000000000008114        0x0 build/systemTimer.o
+ .data          0x0000000000008200       0x30 build/framebuffer.o
+                0x0000000000008200                FrameBufferInfo
+ .data          0x0000000000008230        0x0 build/gpio.o
+ .data          0x0000000000008230        0x0 build/graphics.o
+ .data          0x0000000000008230        0x4 build/main.o
+ .data          0x0000000000008234        0x0 build/systemTimer.o
 
 /DISCARD/
  *(*)
